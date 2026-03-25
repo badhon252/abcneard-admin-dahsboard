@@ -23,6 +23,7 @@ const navigation = [
   { name: "Submission Forms", href: "/submission-forms", icon: ShoppingBasket },
   { name: "User List", href: "/user-list", icon: Users },
   { name: "Question Organizer", href: "/question-organizer", icon: FileQuestion },
+  { name: "Quiz Organizer", href: "/quiz-organizer", icon: FileQuestion },
 ];
 
 export default function Sidebar() {

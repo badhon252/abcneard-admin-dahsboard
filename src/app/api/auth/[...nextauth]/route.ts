@@ -74,7 +74,7 @@ const handler = NextAuth({
           });
 
           const result = await res.json();
-
+               console.log(result)
 
           if (!res.ok || !result.status) {
             throw new Error(result.message || "Login failed");

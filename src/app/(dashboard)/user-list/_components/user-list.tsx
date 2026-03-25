@@ -36,7 +36,7 @@ interface UserData {
 const UserList = () => {
   const session = useSession();
   const token = session?.data?.accessToken;
-  
+
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
 
   const { data, isLoading } = useQuery({

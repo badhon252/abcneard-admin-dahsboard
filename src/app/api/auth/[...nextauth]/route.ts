@@ -81,14 +81,14 @@ const handler = NextAuth({
           }
 
           const { data: user, accessToken } = result;
+
           return {
-            id: user.id,
+            id: user._id,
             email: user.email,
             role: user.role,
-            firstName: user.firstName,
-            lastName: user.lastName,
+           name: user.name,
             image: user.profileImage || "",
-            accessToken,
+            accessToken:user.accessToken,
             refreshToken: user.refreshToken,
           };
         } catch (error) {

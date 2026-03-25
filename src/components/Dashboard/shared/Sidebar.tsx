@@ -2,8 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Ship, LogOut, HardDrive, ShoppingBasket, Users, FileQuestion } from "lucide-react";
-import { LogOut,  ShoppingBasket, SendToBack, TextWrap } from "lucide-react";
+import { Ship, LogOut, HardDrive, ShoppingBasket, Users, FileQuestion, SendToBack, TextWrap } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import {

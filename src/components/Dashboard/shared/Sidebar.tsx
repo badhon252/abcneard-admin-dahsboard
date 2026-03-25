@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Ship, LogOut, HardDrive, ShoppingBasket, Users, FileQuestion } from "lucide-react";
+import { LogOut,  ShoppingBasket, SendToBack, TextWrap } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import {
@@ -18,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const navigation = [
-  { name: "Overview", href: "/", icon: HardDrive },
-  { name: "All Dealers", href: "/dealers", icon: Ship },
+  { name: "Overview", href: "/", icon: SendToBack },
+  { name: "Word Management", href: "/word-management", icon: TextWrap },
   { name: "Submission Forms", href: "/submission-forms", icon: ShoppingBasket },
   { name: "User List", href: "/user-list", icon: Users },
   { name: "Question Organizer", href: "/question-organizer", icon: FileQuestion },

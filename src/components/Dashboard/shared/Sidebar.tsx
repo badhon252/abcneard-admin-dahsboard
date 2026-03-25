@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Ship, LogOut, HardDrive, ShoppingBasket } from "lucide-react";
+import { Ship, LogOut, HardDrive, ShoppingBasket, Users } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import {
@@ -21,6 +21,7 @@ const navigation = [
   { name: "Overview", href: "/", icon: HardDrive },
   { name: "All Dealers", href: "/dealers", icon: Ship },
   { name: "Submission Forms", href: "/submission-forms", icon: ShoppingBasket },
+  { name: "User List", href: "/user-list", icon: Users },
 ];
 
 export default function Sidebar() {

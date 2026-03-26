@@ -2,8 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Ship, LogOut, HardDrive, ShoppingBasket, Users, FileQuestion } from "lucide-react";
-import { LogOut,  ShoppingBasket, SendToBack, TextWrap } from "lucide-react";
+import { Ship, LogOut, HardDrive, ShoppingBasket, Users, FileQuestion, SendToBack, TextWrap, Settings } from "lucide-react";
+
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 import {
@@ -24,6 +24,7 @@ const navigation = [
   { name: "Submission Forms", href: "/submission-forms", icon: ShoppingBasket },
   { name: "User List", href: "/user-list", icon: Users },
   { name: "Question Organizer", href: "/question-organizer", icon: FileQuestion },
+    { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export default function Sidebar() {

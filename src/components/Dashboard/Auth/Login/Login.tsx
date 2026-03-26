@@ -6,10 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
+
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,9 +50,14 @@ export default function Login() {
       <div className="bg-white rounded-2xl shadow-lg px-8 py-10">
         {/* Heading */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-[#0B3B36]">Welcome!</h1>
+          <Image
+            src="/images/Logo.png"
+            alt="ABC Nerd Logo"
+            width={122}
+            height={122}
+            className="mx-auto" />
           <p className="text-gray-500 mt-1 text-sm">
-            Access your account to manage your microsite.
+            Access your account to manage.
           </p>
         </div>
 
@@ -103,29 +109,15 @@ export default function Login() {
                 Remember me
               </label>
             </div>
-
-            <Link
-              href={"/forget-password"}
-              className="text-sm text-[#343A40] hover:underline cursor-pointer"
-            >
-              Forgot password?
-            </Link>
           </div>
 
           <Button
-            className="w-full bg-[#0B3B36] hover:bg-[#0B3B36] mt-4 text-white cursor-pointer"
+            className="w-full bg-[#2058E6] hover:bg-[#2058E6] mt-4 text-white cursor-pointer"
             onClick={handleSignIn}
             disabled={isLoading}
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
-
-          <div className="text-center mt-4">
-            Don’t have an account?{" "}
-            <Link href={"/register"} className="text-[#343A40] font-semibold">
-              Sign Up
-            </Link>
-          </div>
         </div>
       </div>
     </div>

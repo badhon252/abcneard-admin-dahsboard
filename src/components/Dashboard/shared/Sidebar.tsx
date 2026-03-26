@@ -30,6 +30,8 @@ import Image from "next/image";
 const navigation = [
   { name: "Overview", href: "/", icon: SendToBack },
   { name: "Word Management", href: "/word-management", icon: TextWrap },
+    { name: "Add Category", href: "/add-category", icon: TextWrap },
+
   { name: "User List", href: "/user-list", icon: Users },
   {
     name: "Question Organizer",

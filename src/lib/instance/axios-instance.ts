@@ -3,7 +3,8 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import { getSession } from "next-auth/react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL;
 
 export const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE,

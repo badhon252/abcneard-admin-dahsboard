@@ -11,7 +11,7 @@ class UserService {
    */
   async getMyProfile(signal?: AbortSignal): Promise<UserProfile> {
     const response = await axiosInstance.get<UserProfileResponse>(
-      `${this.baseUrl}/my-profile`,
+      `${this.baseUrl}/get-my-profile`,
       { signal },
     );
     return response.data.data;

@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LogOut,
-  ShoppingBasket,
   Users,
   FileQuestion,
   SendToBack,
@@ -40,6 +39,7 @@ const navigation = [
   },
   { name: "Quiz Organizer", href: "/quiz-organizer", icon: FileQuestion },
   { name: "Subscription", href: "/subscription", icon: DollarSign },
+  { name: "Payment History", href: "/payment-history", icon: DollarSign },
   { name: "Settings", href: "/setting", icon: Settings },
 ];
 

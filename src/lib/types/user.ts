@@ -1,12 +1,16 @@
 export interface UserProfile {
   _id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   role: "admin" | "manager" | "user";
+  profileImage?: {
+    public_id: string;
+    secure_url: string;
+  };
   isVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
+  status: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UserProfileResponse {

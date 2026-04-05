@@ -13,6 +13,8 @@ import {
   ListOrdered,
   Heading1,
   Heading2,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import {
   Dialog,
@@ -173,6 +175,8 @@ export default function SubscriptionPage() {
   const queryClient = useQueryClient();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -226,6 +230,54 @@ export default function SubscriptionPage() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, payload }: { id: string; payload: any }) => {
+      const res = await fetch(
+        `${API_BASE}/subscriptionplan/update-subscriptionplan/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.status === "ok") {
+        queryClient.invalidateQueries({ queryKey: ["subscription-plans"] });
+        toast.success("Subscription plan updated successfully");
+        setIsOpen(false);
+        resetForm();
+      } else {
+        toast.error(data.message || "Failed to update plan");
+      }
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(
+        `${API_BASE}/subscriptionplan/delete-subscriptionplan/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.status === "ok") {
+        queryClient.invalidateQueries({ queryKey: ["subscription-plans"] });
+        toast.success("Subscription plan deleted successfully");
+      } else {
+        toast.error(data.message || "Failed to delete plan");
+      }
+    },
+  });
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -236,9 +288,11 @@ export default function SubscriptionPage() {
       wordSwipe: 0,
       aiChat: 0,
     });
+    setIsEdit(false);
+    setSelectedPlanId(null);
   };
 
-  const handleCreate = () => {
+  const handleSubmit = () => {
     const payload = {
       title: formData.title,
       description: formData.description,
@@ -251,7 +305,33 @@ export default function SubscriptionPage() {
       },
       status: "active",
     };
-    createMutation.mutate(payload);
+
+    if (isEdit && selectedPlanId) {
+      updateMutation.mutate({ id: selectedPlanId, payload });
+    } else {
+      createMutation.mutate(payload);
+    }
+  };
+
+  const handleEditClick = (plan: any) => {
+    setFormData({
+      title: plan.title,
+      description: plan.description || "",
+      price: plan.price,
+      currency: plan.currency,
+      interval: plan.interval,
+      wordSwipe: plan.credits?.wordSwipe || 0,
+      aiChat: plan.credits?.aiChat || 0,
+    });
+    setSelectedPlanId(plan._id);
+    setIsEdit(true);
+    setIsOpen(true);
+  };
+
+  const handleDeleteClick = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this plan?")) {
+      deleteMutation.mutate(id);
+    }
   };
 
   return (
@@ -271,9 +351,29 @@ export default function SubscriptionPage() {
                 key={plan._id}
                 className="bg-white rounded-2xl p-8 shadow-sm border border-[#E2E8F0] flex flex-col"
               >
-                <h2 className="text-xl font-semibold text-[#1E293B] mb-4">
-                  {plan.title} Plan
-                </h2>
+                <div className="flex justify-between items-start mb-4">
+                  <h2 className="text-xl font-semibold text-[#1E293B]">
+                    {plan.title} Plan
+                  </h2>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEditClick(plan)}
+                      className="h-8 w-8 p-0 text-blue-600 hover:bg-blue-50"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteClick(plan._id)}
+                      className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
                 <div className="flex items-baseline mb-6">
                   <span className="text-3xl font-bold text-[#1E293B]">
                     {plan.currency === "KRW" ? "₩" : "$"}
@@ -282,14 +382,26 @@ export default function SubscriptionPage() {
                   <span className="text-[#64748B] ml-1">/{plan.interval}</span>
                 </div>
 
-                <Button
-                  disabled
-                  className="w-full bg-[#E2E8F0] text-[#64748B] hover:bg-[#E2E8F0] rounded-xl h-12 mb-8 font-semibold"
-                >
-                  Current Plan
-                </Button>
+                <div className="bg-[#F8FAFC] rounded-xl p-4 mb-6 border border-[#E2E8F0]">
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-[#64748B]">Word Swipe:</span>
+                    <span className="text-sm font-semibold text-[#1E293B]">
+                      {plan.credits?.wordSwipe === -1
+                        ? "Unlimited"
+                        : plan.credits?.wordSwipe}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-[#64748B]">AI Chat:</span>
+                    <span className="text-sm font-semibold text-[#1E293B]">
+                      {plan.credits?.aiChat === -1
+                        ? "Unlimited"
+                        : plan.credits?.aiChat}
+                    </span>
+                  </div>
+                </div>
 
-                <div className="prose prose-sm max-w-none text-[#475569]">
+                <div className="prose prose-sm max-w-none text-[#475569] flex-grow">
                   {plan?.description ? (
                     <div
                       dangerouslySetInnerHTML={{ __html: plan.description }}
@@ -324,7 +436,7 @@ export default function SubscriptionPage() {
         <DialogContent className="max-w-4xl! p-0 border-none bg-[#F4F7FE] max-h-[800px] overflow-y-auto">
           <DialogHeader className="p-6 bg-[#E8F0FE]">
             <DialogTitle className="text-center text-[#3B82F6] text-2xl font-bold">
-              Add Subscription
+              {isEdit ? "Update Subscription" : "Add Subscription"}
             </DialogTitle>
           </DialogHeader>
 
@@ -447,11 +559,17 @@ export default function SubscriptionPage() {
                 Cancel
               </Button>
               <Button
-                onClick={handleCreate}
-                disabled={createMutation.isPending}
+                onClick={handleSubmit}
+                disabled={createMutation.isPending || updateMutation.isPending}
                 className="bg-[#3B82F6] hover:bg-blue-600 w-48 h-12 text-white font-semibold rounded-xl"
               >
-                {createMutation.isPending ? "Creating..." : "Create plan"}
+                {isEdit
+                  ? updateMutation.isPending
+                    ? "Updating..."
+                    : "Update plan"
+                  : createMutation.isPending
+                    ? "Creating..."
+                    : "Create plan"}
               </Button>
             </div>
           </div>
